@@ -34,17 +34,17 @@ public final class Constants {
       new Translation2d(kWheelBase / 2, kTrackWidth / 2),
       new Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
       new Translation2d(-kWheelBase / 2, kTrackWidth / 2));
-
+      //Driving-Motor
       public static final int kFLDriveMotorPort = 1;
       public static final int kFRDriveMotorPort = 2;
       public static final int kBLDriveMotorPort = 3;
       public static final int kBRDriveMotorPort = 4;
-      
+      //Turning-Motor
       public static final int kFLTurningMotorPort = 5;
       public static final int kFRTurningMotorPort = 6;
       public static final int kBLTurningMotorPort = 7;
       public static final int kBRTurningMotorPort = 8;
-
+      
       public static final boolean kFLDriveEncoderReversed = false;
       public static final boolean kFRDriveEncoderReversed = true;
       public static final boolean kBLDriveEncoderReversed = false;
@@ -86,29 +86,52 @@ public final class Constants {
     public static final int kDriverRotAxis = 4;
     public static final int kDriverFieldOrientedButtonIdx = 1;
 
-    public static final double kDeadBand = 0.04;
-  }
-
-
-  public static final class CoralConstants {
-    public static final double kP = 0.125;
-    public static final double kI = 0.0;
-    public static final double kD = 0.001;
-
-    public static final double kCoralStation = -68;
-    public static final double kLevel1 = 0.0;
-    public static final double kLevel2 = -35;
-    public static final double kLevel3 = -117;
-  }
-
-  public static final class AlgaeConstants {
-    public static final double kP = 0.25;
-    public static final double kPcatch = 0.015;
-    public static final double kI = 0.0;
-    public static final double kD = 0.0;
+    public static final double kDeadBand = 0.05;
   }
 
   public static final class MotorConstants {
     public static final double kFreeSpeedRpm = 6784;
+  }
+
+  public static final class VisionConstants {
+
+    public static final double kPX = 0.03;    //MoveControllerX
+    public static final double kIX = 0.0;
+    public static final double kDX = 0.001;
+
+    public static final double kPY = 0.05;    //MoveControllerY
+    public static final double kIY = 0.0;
+    public static final double kDY = 0.0012;
+
+    public static final double kPT = 0.025;    //TurnController
+    public static final double kIT = 0.0;
+    public static final double kDT = 0.001;
+
+    public static final double kLreefPointX = 0.0;    //Reef-Point (X-Axis)
+    public static final double kRreefPointX = 0.0;
+
+    public static final double kReefPointY = 0.0;    //Reef-Point (Y-Axis)
+
+    public static final double kStationPointX = 0.0;    //Station-Point (X-Axis)
+    public static final double kStationPointY = 0.0;    //Station-Point (Y-Axis)
+  }
+
+  public static final class ElevatorConstants {
+    public static final int ElevatorMotorId = 0;
+
+    public static final double kP = 0.2;
+    public static final double kI = 0.0;
+    public static final double kD = 0.001;
+
+    public static final double kIntake = 0.0;
+    public static final double kL1 = 0.0;
+    public static final double kL2 = 0.0;
+    public static final double kL3 = 0.0;
+    public static final double kL4 = 0.0;
+  }
+
+  public static final class CoralConstants {
+    public static final int IRport = 0;
+    public static final double IRVoltage = 0.0;
   }
 }
