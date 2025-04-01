@@ -9,20 +9,28 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCmd;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.subsystems.Control.AutoSubsystem;
+import frc.robot.subsystems.Control.ControlSubsystem;
+import frc.robot.subsystems.Drivetain.SwerveSubsystem;
+import frc.robot.subsystems.Mechanism.CoralSubsystem;
+import frc.robot.subsystems.Mechanism.ElevatorSubsystem;
+import frc.robot.subsystems.Vision.VisionSubsystem;
 
 
 
 public class RobotContainer {
 
   private final SwerveSubsystem swerveSubsystem = new SwerveSubsystem();
-  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem(null, null);
-  private final VisionSubsystem visionSubsystem = new VisionSubsystem();
+  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  private final VisionSubsystem visionSubsystem = new VisionSubsystem();  
+  private final CoralSubsystem coralSubsystem = new CoralSubsystem();
+  private final ControlSubsystem controlSubsystem = new ControlSubsystem(coralSubsystem, elevatorSubsystem, visionSubsystem);
+  private final AutoSubsystem autoSubsystem = new AutoSubsystem(swerveSubsystem, visionSubsystem);
+  private double MoveTimeX, MoveTimeY, Turn;
 
   private final Joystick m_Joystick = new Joystick(OIConstants.kDriverControllerPort);
   public RobotContainer() {
@@ -59,6 +67,7 @@ public class RobotContainer {
         () -> visionSubsystem.stationTurnOutput(), 
         () -> false)
     );
+    controlSubsystem.periodic();
     new InstantCommand();
     configureButtonBindings();
   }
@@ -71,10 +80,46 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand(){
-    // return new SwerveJoystickCmd(swerveSubsystem, () -> -0.4, () -> 0.0, () -> 0.0, () -> false).withTimeout(6)
-    // .andThen(new InstantCommand(() -> System.out.println("test"))).withTimeout(2)
-    // .andThen(new RunCommand(() -> coralSubsystem.Shoot(), coralSubsystem)).withTimeout(3);
-    return null;
+    int Auto = autoSubsystem.StartPathChoose();
+
+    if (Auto == 1) {
+      MoveTimeX = 3;
+      MoveTimeY = 4;
+      Turn = 315;
+    }else if (Auto == 2) {
+      MoveTimeX = 3;
+      MoveTimeY = 4;
+      Turn = 45;
+    }else {
+      MoveTimeX = 5;
+      MoveTimeY = 3.5;
+      Turn = 315;
+    }
+    return new SwerveJoystickCmd(swerveSubsystem, 
+      () -> visionSubsystem.reefXOutput(VisionConstants.kLreefPointX), 
+      () -> visionSubsystem.reefYOutput(), 
+      () -> visionSubsystem.reefTurnOutput(), 
+      () -> false).withTimeout(3)
+      .andThen(new SwerveJoystickCmd(swerveSubsystem, 
+      () -> 0.4, 
+      () -> 0.0, 
+      () -> autoSubsystem.AutoTurn(Turn), 
+      () -> true).withTimeout(MoveTimeX))
+      .andThen(new SwerveJoystickCmd(swerveSubsystem, 
+      () -> 0.0, 
+      () -> 0.7, 
+      () -> autoSubsystem.AutoTurn(Turn), 
+      () -> true).withTimeout(MoveTimeY)
+      .andThen(new SwerveJoystickCmd(swerveSubsystem, 
+      () -> -visionSubsystem.stationXOutput(), 
+      () -> -visionSubsystem.stationYOutput(), 
+      () -> visionSubsystem.stationTurnOutput(), 
+      () -> false))).withTimeout(3)
+      .andThen(new SwerveJoystickCmd(swerveSubsystem, 
+      () -> visionSubsystem.reefXOutput(VisionConstants.kRreefPointX), 
+      () -> visionSubsystem.reefYOutput(), 
+      () -> visionSubsystem.reefTurnOutput(), 
+      () -> false).withTimeout(4));
   }
 }
 

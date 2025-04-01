@@ -133,5 +133,20 @@ public final class Constants {
   public static final class CoralConstants {
     public static final int IRport = 0;
     public static final double IRVoltage = 0.0;
+
+    public static final double kPAngle = 0.05;
+    public static final double kIAngle = 0.0;
+    public static final double kDAngle = 0.001;
+
+    public static final double kWaitAngle = 0.0;
+    public static final double kL1Angle = 0.0;
+    public static final double kL2Angle = 0.0;
+    public static final double kL4Angle = 0.0;
+  }
+
+  public static final class AutoConstants {
+    public static final double kPAuto = 0.3;
+    public static final double kIAuto = 0.0;
+    public static final double kDAuto = 0.0;
   }
 }

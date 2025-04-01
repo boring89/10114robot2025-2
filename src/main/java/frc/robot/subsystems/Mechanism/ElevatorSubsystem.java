@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Mechanism;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 
@@ -13,8 +13,6 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final PIDController ElevatorController;
     private int level = 1;
     private double desiredPosition = 0.0;
-    private final VisionSubsystem visionSubsystem = new VisionSubsystem();
-    private final CoralSubsystem coralSubsystem = new CoralSubsystem();
     private boolean[] Level;
 
     public ElevatorSubsystem() {
@@ -84,16 +82,6 @@ public class ElevatorSubsystem extends SubsystemBase {
  
     @Override
     public void periodic() {
-
-        boolean hasCoral = coralSubsystem.DetectCoral();
-        boolean nearReef = visionSubsystem.getReefTA() > 4;
-        
         setLevel();
-        if (hasCoral && nearReef) {
-            setPosition(desiredPosition);
-        }else {
-            setPosition(0);
-        }
-        updateLevelSelection();
     }
 }
